@@ -8,8 +8,8 @@ import lombok.Data;
 @Table(name = "T_PC_USUARIOS")
 public class Usuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idUsuario;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private long idUsuario;
 
     @Column(name = "nm_usuario", length = 200, nullable = false)
     private String nomeUsuario;
