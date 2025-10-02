@@ -9,6 +9,7 @@ import lombok.Data;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "ID_USUARIO")
     private long idUsuario;
 
     @Column(name = "nm_usuario", length = 200, nullable = false)
