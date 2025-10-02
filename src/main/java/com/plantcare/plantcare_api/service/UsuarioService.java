@@ -49,8 +49,6 @@ public class UsuarioService {
         newUsuario.setEmailUsuario(dto.email());
         newUsuario.setSenhaUsuario(dto.senha());
 
-
-
         log.info("Usuario Criado"
         + "\n nome: " + newUsuario.getNomeUsuario()
         + "\n email: " + newUsuario.getEmailUsuario());

@@ -30,7 +30,7 @@ public class UsuarioController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }catch (Exception e){
             log.error(e.getMessage());
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Erro interno do servidor", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
