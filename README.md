@@ -14,7 +14,7 @@ O problema central que buscamos solucionar é a gestão descentralizada de dados
 
 ## 🎥 Link para o Vídeo da Proposta Tecnológica
 
-[Link do YouTube](https://www.youtube.com/ "Proposta Tecnológica")
+[Link do YouTube](https://www.youtube.com/watch?v=AWLglePin50&feature=youtu.be "Proposta Tecnológica")
 
 ## 👥 Integrantes e Responsabilidades
 
