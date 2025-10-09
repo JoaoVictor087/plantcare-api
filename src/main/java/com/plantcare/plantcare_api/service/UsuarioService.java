@@ -17,7 +17,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 
 
-    public void validarUsuario(CriarUsuarioRequestDTO dto){
+    private void validarUsuario(CriarUsuarioRequestDTO dto){
         if(dto.email() == null || !dto.email().contains("@")){
             throw new IllegalArgumentException("Email Inválido");
         }
