@@ -85,6 +85,7 @@ Para facilitar a correção, toda a documentação e os arquivos de teste foram 
 |--------------|----------|
 | Documentação Java Sprint01.pdf | Documentação Completa do projeto, incluindo o Cronograma, o Diagrama MER, e o Diagrama UML (Diagrama de Classes de Entidade). |
 | PlantCare.postman_collection.json | Collection do Postman com todas as requisições de teste prontas para os endpoints implementados. |
+|EndpointsAPI.yaml | Endpoints no padrão OpenAPI|
 
 ## 🖼️ Imagens dos Diagramas
 
