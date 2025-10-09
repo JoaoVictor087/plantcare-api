@@ -102,7 +102,7 @@ Este é o Diagrama Amarelo que representa a estrutura relacional das tabelas.
 Este diagrama (presente na documentação como "Diagrama UML") representa o Mapeamento Objeto-Relacional (ORM) das classes Java.
 
 
-![Diagrama UML](./docs/images/DIAGRAMA UML sprint 1.png "Diagrama UML")
+![Diagrama UML](./docs/images/DIAGRAMA-UML-sprint-1.png "Diagrama UML")
 
 ## 🌐 Endpoints da API Implementados (Nível de Maturidade 1 - Richardson)
 
