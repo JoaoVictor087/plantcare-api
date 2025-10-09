@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "2e8f8965-6f2a-494e-83e9-605ba4c6eaa1",
+		"name": "PlantCare",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44685568",
+		"_collection_link": "https://crimson-spaceship-6852170.postman.co/workspace/Jo%C3%A3o-Victor's-Workspace~14d6886a-0239-43d5-8f95-4c6a62e730c8/collection/44685568-2e8f8965-6f2a-494e-83e9-605ba4c6eaa1?action=share&source=collection_link&creator=44685568"
+	},
+	"item": [
+		{
+			"name": "Usuario",
+			"item": [
+				{
+					"name": "criarUsuario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Alex Santos\",\r\n    \"email\": \"fdshjfhdsf@gmail.com\",\r\n    \"senha\": \"12345678@\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/usuario/criarUsuario",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"usuario",
+								"criarUsuario"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Planta",
+			"item": [
+				{
+					"name": "adicionarPlanta",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomePlanta\": \"Cacto9\",\r\n    \"tipoPlanta\": \"Cactaceae\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/planta/1/adicionarPlanta",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"planta",
+								"1",
+								"adicionarPlanta"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizarPlanta",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomePlanta\": \"Novo Cacto\",\r\n    \"tipoPlanta\": \"Cactaceae2\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/api/planta/atualizarPlanta/4",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"planta",
+								"atualizarPlanta",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ListarPlantasDoUsuario",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/api/planta/listarPlantas/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"planta",
+								"listarPlantas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletarPlantaPorId",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:8080/api/planta/deletarPlanta/953",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"planta",
+								"deletarPlanta",
+								"953"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
