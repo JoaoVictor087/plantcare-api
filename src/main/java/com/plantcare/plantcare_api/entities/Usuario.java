@@ -2,6 +2,9 @@ package com.plantcare.plantcare_api.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
+
+import java.util.Collection;
 
 @Data
 @Entity
@@ -20,4 +23,8 @@ public class Usuario {
 
     @Column(name = "senha", length = 50, nullable = false)
     private String senhaUsuario;
+
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
 }

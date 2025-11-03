@@ -5,17 +5,17 @@ import com.plantcare.plantcare_api.entities.Usuario;
 import com.plantcare.plantcare_api.repositories.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UsuarioService {
-    private static final Logger log = LoggerFactory.getLogger(UsuarioService.class);
     private static final String CARACTERES_ESPECIAIS = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
     private final UsuarioRepository usuarioRepository;
-
 
     private void validarUsuario(CriarUsuarioRequestDTO dto){
         if(dto.email() == null || !dto.email().contains("@")){
