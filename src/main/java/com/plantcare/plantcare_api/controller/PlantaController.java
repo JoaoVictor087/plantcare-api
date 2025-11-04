@@ -1,6 +1,6 @@
 package com.plantcare.plantcare_api.controller;
 
-import com.plantcare.plantcare_api.DTOs.PlantaDTO;
+import com.plantcare.plantcare_api.DTOs.request.PlantaDTO;
 import com.plantcare.plantcare_api.entities.Planta;
 import com.plantcare.plantcare_api.service.PlantaService;
 import lombok.RequiredArgsConstructor;

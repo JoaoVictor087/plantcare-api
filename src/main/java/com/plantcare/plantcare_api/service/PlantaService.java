@@ -1,6 +1,6 @@
 package com.plantcare.plantcare_api.service;
 
-import com.plantcare.plantcare_api.DTOs.PlantaDTO;
+import com.plantcare.plantcare_api.DTOs.request.PlantaDTO;
 import com.plantcare.plantcare_api.entities.Planta;
 import com.plantcare.plantcare_api.repositories.PlantaRepository;
 import com.plantcare.plantcare_api.repositories.UsuarioRepository;

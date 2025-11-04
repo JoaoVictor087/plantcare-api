@@ -1,4 +1,4 @@
-package com.plantcare.plantcare_api.DTOs;
+package com.plantcare.plantcare_api.DTOs.request;
 
 public record PlantaDTO(
   String nomePlanta,

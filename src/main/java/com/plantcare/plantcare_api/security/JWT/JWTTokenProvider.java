@@ -27,7 +27,7 @@ public class JWTTokenProvider {
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             return JWT.create()
                     .withIssuer("PlantCare")
-                    .withSubject(usuario.getNomeUsuario())
+                    .withSubject(usuario.getEmailUsuario())
                     .withExpiresAt(expiracao(60))
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
