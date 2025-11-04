@@ -8,6 +8,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
 
 @RestControllerAdvice
 public class ExceptionsHandler {
@@ -52,5 +55,15 @@ public class ExceptionsHandler {
                 "Erro interno do Servidor"
         );
         return ResponseEntity.internalServerError().body(dto);
+    }
+
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<RestErrorDTO> handleResponseStatusException(ResponseStatusException exception) {
+        RestErrorDTO dto = new RestErrorDTO(
+                exception.getStatusCode().value(),
+                exception.getReason(),
+                exception.getMessage()
+        );
+        return new ResponseEntity<>(dto, exception.getStatusCode());
     }
 }

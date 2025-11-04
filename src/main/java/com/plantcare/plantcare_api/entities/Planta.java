@@ -24,6 +24,9 @@ public class Planta {
     @Column(name = "DT_CADASTRO", nullable = false)
     private LocalDateTime dataCadastro;
 
+    @Column(name = "DT_ATUALIZADO")
+    private LocalDateTime dataAtualizacao;
+
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO", nullable = false)
     @JsonIgnore

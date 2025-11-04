@@ -1,8 +1,10 @@
 package com.plantcare.plantcare_api.entities;
 
+import com.plantcare.plantcare_api.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -26,8 +28,15 @@ public class Usuario implements UserDetails {
     @Column(name = "senha", length = 255, nullable = false)
     private String senhaUsuario;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name =  "role", length = 20, nullable = false)
+    private Role role;
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        if (this.role == null) {
+            return List.of();
+        }
+        return List.of(new SimpleGrantedAuthority(this.role.name()));
     }
 
     @Override

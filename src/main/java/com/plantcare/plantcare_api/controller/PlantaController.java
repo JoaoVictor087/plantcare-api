@@ -2,79 +2,111 @@ package com.plantcare.plantcare_api.controller;
 
 import com.plantcare.plantcare_api.DTOs.request.PlantaDTO;
 import com.plantcare.plantcare_api.entities.Planta;
+import com.plantcare.plantcare_api.entities.Usuario;
 import com.plantcare.plantcare_api.service.PlantaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
-@RequestMapping("/planta")
+@RequestMapping("/plantas")
 @RequiredArgsConstructor
 public class PlantaController {
-    private static final Logger log = LoggerFactory.getLogger(PlantaController.class);
+
     private final PlantaService plantaService;
 
-    @PostMapping("/{id_usuario}/adicionarPlanta")
-    public ResponseEntity<?>adicionarPlanta(@RequestBody PlantaDTO dto, @PathVariable long id_usuario){
-        try{
-            Planta planta = plantaService.adicionarPlanta(dto, id_usuario);
-            log.info("Planta adicionada com sucesso ao usuário: " + planta.getUsuario().getNomeUsuario());
-            return new ResponseEntity<>("Planta adicionada com sucesso",HttpStatus.CREATED);
-        }catch (Exception e){
-            log.error("Erro intero do servidor");
-            log.error(e.getMessage());
-            return new ResponseEntity<>("Erro interno do servidor do servidor", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    @PostMapping
+    public ResponseEntity<EntityModel<Planta>> criarPlanta(
+            @RequestBody @Valid PlantaDTO plantaDTO,
+            @AuthenticationPrincipal Usuario usuarioLogado
+    ) {
+        Planta novaPlanta = plantaService.adicionarPlanta(plantaDTO, usuarioLogado);
 
-    @PutMapping("/atualizarPlanta/{id_planta}")
-    public ResponseEntity<?>atualizarPlanta(@RequestBody PlantaDTO dto, @PathVariable long id_planta){
-        try {
-            plantaService.atualizarPlanta(dto,id_planta);
-            log.info("Planta atualizada com sucesso");
-            return new ResponseEntity<>("Planta atualizada com sucesso", HttpStatus.OK);
-        }catch (EmptyResultDataAccessException e){
-            log.error(e.getMessage());
-            return new ResponseEntity<>("Planta não existe no banco de dados", HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            log.error(e.getMessage());
-            return new ResponseEntity<>("Erro interno do servidor", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+        EntityModel<Planta> plantaModel = EntityModel.of(novaPlanta,
+                linkTo(methodOn(PlantaController.class).buscarPlantaPorId(Math.toIntExact(novaPlanta.getId()), usuarioLogado)).withSelfRel(),
+                linkTo(methodOn(PlantaController.class).listarPlantas(usuarioLogado)).withRel("todas-plantas")
+        );
 
-    @GetMapping("/listarPlantas/{id_usuario}")
-    public ResponseEntity<?>listarPlantas(@PathVariable long id_usuario, Pageable pageable){
-        try {
-            Page<Planta> listaDePlantas = plantaService.listarPlantasDoUsuario(pageable, id_usuario);
-            log.info("Retornado lista de plantas do usuário");
-            return new ResponseEntity<>(listaDePlantas, HttpStatus.OK);
-        }catch (Exception e){
-            log.error("Erro interno do Servidor");
-            log.error(e.getMessage());
-            return new ResponseEntity<>("Erro interno do servidor", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        URI location = linkTo(methodOn(PlantaController.class).buscarPlantaPorId(Math.toIntExact(novaPlanta.getId()), usuarioLogado)).toUri();
+        return ResponseEntity.created(location).body(plantaModel);
     }
 
 
-    @DeleteMapping("/deletarPlanta/{id_planta}")
-    public ResponseEntity<?>deletarPlataPorId(@PathVariable long id_planta){
-        try {
-            plantaService.deletarPlantaPorId(id_planta);
-            return new ResponseEntity<>("Planta deletada com sucesso", HttpStatus.OK);
-        }catch (NullPointerException e){
-            log.error("Planta não encontrada no banco de dados");
-            log.error(e.getMessage());
-            return new ResponseEntity<>("Planta não encontrada no banco de dados", HttpStatus.NOT_FOUND);
-        }catch (Exception e){
-            log.error("Erro interno do servidor");
-            log.error(e.getMessage());
-            return new ResponseEntity<>("Erro interno do servidor", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping
+    public ResponseEntity<CollectionModel<EntityModel<Planta>>> listarPlantas(
+            @AuthenticationPrincipal Usuario usuarioLogado
+    ) {
+        List<Planta> plantas = plantaService.listarPlantas(usuarioLogado);
+
+        List<EntityModel<Planta>> plantasModel = plantas.stream()
+                .map(planta -> EntityModel.of(planta,
+                        linkTo(methodOn(PlantaController.class).buscarPlantaPorId(Math.toIntExact(planta.getId()), usuarioLogado)).withSelfRel(),
+                        linkTo(methodOn(PlantaController.class).atualizarPlanta(Math.toIntExact(planta.getId()), null, usuarioLogado)).withRel("update"),
+                        linkTo(methodOn(PlantaController.class).deletarPlanta(Math.toIntExact(planta.getId()), usuarioLogado)).withRel("delete")
+                ))
+                .collect(Collectors.toList());
+
+
+        CollectionModel<EntityModel<Planta>> collectionModel = CollectionModel.of(plantasModel,
+                linkTo(methodOn(PlantaController.class).listarPlantas(usuarioLogado)).withSelfRel()
+        );
+
+        return ResponseEntity.ok(collectionModel);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EntityModel<Planta>> buscarPlantaPorId(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal Usuario usuarioLogado
+    ) {
+
+        Planta planta = plantaService.buscarPlantaPorId(Long.valueOf(id), usuarioLogado);
+
+
+        EntityModel<Planta> plantaModel = EntityModel.of(planta,
+                linkTo(methodOn(PlantaController.class).buscarPlantaPorId(id, usuarioLogado)).withSelfRel(),
+                linkTo(methodOn(PlantaController.class).atualizarPlanta(id, null, usuarioLogado)).withRel("update"),
+                linkTo(methodOn(PlantaController.class).deletarPlanta(id, usuarioLogado)).withRel("delete"),
+                linkTo(methodOn(PlantaController.class).listarPlantas(usuarioLogado)).withRel("todas-plantas")
+        );
+
+        return ResponseEntity.ok(plantaModel);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EntityModel<Planta>> atualizarPlanta(
+            @PathVariable Integer id,
+            @RequestBody @Valid PlantaDTO plantaDTO,
+            @AuthenticationPrincipal Usuario usuarioLogado
+    ) {
+        Planta plantaAtualizada = plantaService.atualizarPlanta(Long.valueOf(id), plantaDTO, usuarioLogado);
+
+        EntityModel<Planta> plantaModel = EntityModel.of(plantaAtualizada,
+                linkTo(methodOn(PlantaController.class).buscarPlantaPorId(id, usuarioLogado)).withSelfRel(),
+                linkTo(methodOn(PlantaController.class).listarPlantas(usuarioLogado)).withRel("todas-plantas")
+        );
+
+        return ResponseEntity.ok(plantaModel);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarPlanta(
+            @PathVariable Integer id,
+            @AuthenticationPrincipal Usuario usuarioLogado
+    ) {
+
+        plantaService.deletarPlanta(Long.valueOf(id), usuarioLogado);
+        return ResponseEntity.noContent().build();
     }
 }

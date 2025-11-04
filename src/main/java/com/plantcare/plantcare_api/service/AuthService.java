@@ -4,6 +4,7 @@ import com.plantcare.plantcare_api.DTOs.request.CriarUsuarioDTO;
 import com.plantcare.plantcare_api.DTOs.request.LoginRequestDTO;
 import com.plantcare.plantcare_api.DTOs.response.LoginResponseDTO;
 import com.plantcare.plantcare_api.entities.Usuario;
+import com.plantcare.plantcare_api.enums.Role;
 import com.plantcare.plantcare_api.exceptions.EmailException;
 import com.plantcare.plantcare_api.exceptions.SenhaException;
 import com.plantcare.plantcare_api.repositories.UsuarioRepository;
@@ -38,6 +39,8 @@ public class AuthService {
         Usuario usuario = new Usuario();
         usuario.setNomeUsuario(dto.nome());
         usuario.setEmailUsuario(dto.email());
+
+        usuario.setRole(Role.ROLE_USER);
 
         String senhaCriptografada = bCrypt.encode(dto.senha());
 
