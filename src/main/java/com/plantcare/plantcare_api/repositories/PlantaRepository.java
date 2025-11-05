@@ -17,4 +17,5 @@ public interface PlantaRepository extends JpaRepository<Planta, Long> {
     @Override
     void deleteById(Long aLong);
     List<Planta> findByUsuario(Usuario usuario);
+    Planta findPlantaById(Long id_planta);
 }

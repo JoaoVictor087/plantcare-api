@@ -22,15 +22,18 @@ public class Usuario implements UserDetails {
     @Column(name = "nm_usuario", length = 200, nullable = false)
     private String nomeUsuario;
 
-    @Column(name = "email", length = 255, nullable = false)
+    @Column(name = "email", nullable = false)
     private String emailUsuario;
 
-    @Column(name = "senha", length = 255, nullable = false)
+    @Column(name = "senha", nullable = false)
     private String senhaUsuario;
 
     @Enumerated(EnumType.STRING)
     @Column(name =  "role", length = 20, nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "usuario")
+    private List<Planta> usuario;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == null) {

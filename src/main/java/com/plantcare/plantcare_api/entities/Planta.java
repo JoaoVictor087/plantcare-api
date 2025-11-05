@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,11 +25,23 @@ public class Planta {
     @Column(name = "DT_CADASTRO", nullable = false)
     private LocalDateTime dataCadastro;
 
-    @Column(name = "DT_ATUALIZADO")
+    @Column(name = "DT_ATUALIZACAO")
     private LocalDateTime dataAtualizacao;
+
+    @Column(name = "imagem")
+    private String imgLink;
 
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO", nullable = false)
     @JsonIgnore
     private Usuario usuario;
+
+    @OneToMany(mappedBy = "planta")
+    private List<Sensor> sensores;
+
+    @OneToMany(mappedBy = "planta")
+    private List<Alerta> alertas;
+
+    @OneToMany(mappedBy = "planta")
+    private List<Recomendacao> recomendacoes;
 }

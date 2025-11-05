@@ -28,7 +28,7 @@ public class UsuarioService {
 
         if (novoEmail != null && !novoEmail.isBlank() && !novoEmail.equals(usuario.getEmailUsuario())) {
 
-            Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(novoEmail);
+            Optional<Usuario> usuarioExistente = usuarioRepository.findByEmailUsuario(novoEmail);
 
             if (usuarioExistente.isPresent()) {
 
