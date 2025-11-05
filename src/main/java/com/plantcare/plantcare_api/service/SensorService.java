@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -16,10 +18,10 @@ public class SensorService {
     private final SensorRepository sensorRepository;
     private final PlantaRepository plantaRepository;
 
-    public Sensor criarSensor(CreateSensorDTO dto, Long id_planta){
+    public Sensor criarSensor(CreateSensorDTO dto){
         Sensor sensor = new Sensor();
         sensor.setSensor(dto.tipoSensor());
-        sensor.setPlanta(plantaRepository.findPlantaById(id_planta));
+        sensor.setPlanta(plantaRepository.findPlantaById(dto.id_planta()));
 
         sensorRepository.save(sensor);
         return sensor;
@@ -33,6 +35,10 @@ public class SensorService {
         }
         sensorRepository.deleteById(id_sensor);
         log.debug("Sensor de id: {} removido com sucesso", id_sensor);
+    }
+
+    public List<Sensor> listarSensores(Long id_planta){
+        return sensorRepository.findByPlantaId(id_planta);
     }
 
 }
