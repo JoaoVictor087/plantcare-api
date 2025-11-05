@@ -42,7 +42,6 @@ public class PlantaController {
         return ResponseEntity.created(location).body(plantaModel);
     }
 
-
     @GetMapping
     public ResponseEntity<CollectionModel<EntityModel<Planta>>> listarPlantas(
             @AuthenticationPrincipal Usuario usuarioLogado
