@@ -1,8 +1,10 @@
 package com.plantcare.plantcare_api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.plantcare.plantcare_api.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,8 +34,10 @@ public class Usuario implements UserDetails {
     @Column(name =  "role", length = 20, nullable = false)
     private Role role;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario")
-    private List<Planta> usuario;
+    @ToString.Exclude
+    private List<Planta> plantas;
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == null) {

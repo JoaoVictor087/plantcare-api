@@ -30,9 +30,11 @@ public class AuthService {
 
     public Usuario criarConta(CriarUsuarioDTO dto) {
         if (usuarioRepository.existsByEmailUsuario(dto.email())) {
+            log.debug("email {}já cadastrado", dto.email());
             throw new EmailException("Email já cadastrado");
         }
         if (!isSenhaValida(dto.senha())) {
+            log.debug("senha não válida");
             throw new SenhaException("Senha não é válida");
         }
 
@@ -46,6 +48,7 @@ public class AuthService {
 
         usuario.setSenhaUsuario(senhaCriptografada);
         usuarioRepository.save(usuario);
+        log.debug("Usuário {} cadastrado com sucesso", dto.nome());
         return usuario;
     }
 
@@ -56,6 +59,7 @@ public class AuthService {
         var token = jwtTokenProvider.gerarToken((Usuario) auth.getPrincipal());
 
         LoginResponseDTO loginSucesso = new LoginResponseDTO(token);
+        log.debug("usuário {} logado com sucesso", dto.email());
         return loginSucesso;
     }
 

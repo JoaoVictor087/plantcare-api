@@ -1,6 +1,7 @@
 package com.plantcare.plantcare_api.controller;
 
 import com.plantcare.plantcare_api.DTOs.request.PlantaDTO;
+import com.plantcare.plantcare_api.DTOs.response.PlantaResponseDTO;
 import com.plantcare.plantcare_api.entities.Planta;
 import com.plantcare.plantcare_api.entities.Usuario;
 import com.plantcare.plantcare_api.service.PlantaService;
@@ -26,38 +27,50 @@ public class PlantaController {
 
     private final PlantaService plantaService;
 
+    private PlantaResponseDTO toResponseDTO(Planta planta) {
+        return new PlantaResponseDTO(
+                planta.getId(),
+                planta.getNomePlanta(),
+                planta.getTipoPlanta(),
+                planta.getDataCadastro(),
+                planta.getDataAtualizacao(),
+                planta.getImgLink()
+        );
+    }
+
     @PostMapping
-    public ResponseEntity<EntityModel<Planta>> criarPlanta(
-            @RequestBody @Valid PlantaDTO plantaDTO,
-            @AuthenticationPrincipal Usuario usuarioLogado
+    public ResponseEntity<?> criarPlanta(@RequestBody @Valid PlantaDTO plantaDTO,
+                                         @AuthenticationPrincipal Usuario usuarioLogado
     ) {
         Planta novaPlanta = plantaService.adicionarPlanta(plantaDTO, usuarioLogado);
 
-        EntityModel<Planta> plantaModel = EntityModel.of(novaPlanta,
-                linkTo(methodOn(PlantaController.class).buscarPlantaPorId(Math.toIntExact(novaPlanta.getId()), usuarioLogado)).withSelfRel(),
+        PlantaResponseDTO responseDTO = toResponseDTO(novaPlanta);
+
+        EntityModel<PlantaResponseDTO> plantaModel = EntityModel.of(responseDTO,
+                linkTo(methodOn(PlantaController.class).buscarPlantaPorId(novaPlanta.getId(), usuarioLogado)).withSelfRel(),
                 linkTo(methodOn(PlantaController.class).listarPlantas(usuarioLogado)).withRel("todas-plantas")
         );
 
-        URI location = linkTo(methodOn(PlantaController.class).buscarPlantaPorId(Math.toIntExact(novaPlanta.getId()), usuarioLogado)).toUri();
+        URI location = linkTo(methodOn(PlantaController.class).buscarPlantaPorId(novaPlanta.getId(), usuarioLogado)).toUri();
         return ResponseEntity.created(location).body(plantaModel);
     }
 
     @GetMapping
-    public ResponseEntity<CollectionModel<EntityModel<Planta>>> listarPlantas(
-            @AuthenticationPrincipal Usuario usuarioLogado
-    ) {
+    public ResponseEntity<?> listarPlantas(@AuthenticationPrincipal Usuario usuarioLogado){
         List<Planta> plantas = plantaService.listarPlantas(usuarioLogado);
 
-        List<EntityModel<Planta>> plantasModel = plantas.stream()
-                .map(planta -> EntityModel.of(planta,
-                        linkTo(methodOn(PlantaController.class).buscarPlantaPorId(Math.toIntExact(planta.getId()), usuarioLogado)).withSelfRel(),
-                        linkTo(methodOn(PlantaController.class).atualizarPlanta(Math.toIntExact(planta.getId()), null, usuarioLogado)).withRel("update"),
-                        linkTo(methodOn(PlantaController.class).deletarPlanta(Math.toIntExact(planta.getId()), usuarioLogado)).withRel("delete")
-                ))
+        List<EntityModel<PlantaResponseDTO>> plantasModel = plantas.stream()
+                .map(planta -> {
+                    PlantaResponseDTO dto = toResponseDTO(planta);
+                    return EntityModel.of(dto,
+                            linkTo(methodOn(PlantaController.class).buscarPlantaPorId(planta.getId(), usuarioLogado)).withSelfRel(),
+                            linkTo(methodOn(PlantaController.class).atualizarPlanta(planta.getId(), null, usuarioLogado)).withRel("update"),
+                            linkTo(methodOn(PlantaController.class).deletarPlanta(planta.getId(), usuarioLogado)).withRel("delete")
+                    );
+                })
                 .collect(Collectors.toList());
 
-
-        CollectionModel<EntityModel<Planta>> collectionModel = CollectionModel.of(plantasModel,
+        CollectionModel<EntityModel<PlantaResponseDTO>> collectionModel = CollectionModel.of(plantasModel,
                 linkTo(methodOn(PlantaController.class).listarPlantas(usuarioLogado)).withSelfRel()
         );
 
@@ -65,15 +78,14 @@ public class PlantaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<Planta>> buscarPlantaPorId(
-            @PathVariable Integer id,
-            @AuthenticationPrincipal Usuario usuarioLogado
+    public ResponseEntity<?> buscarPlantaPorId(@PathVariable Long id,
+                                               @AuthenticationPrincipal Usuario usuarioLogado
     ) {
+        Planta planta = plantaService.buscarPlantaPorId(id, usuarioLogado);
 
-        Planta planta = plantaService.buscarPlantaPorId(Long.valueOf(id), usuarioLogado);
+        PlantaResponseDTO responseDTO = toResponseDTO(planta);
 
-
-        EntityModel<Planta> plantaModel = EntityModel.of(planta,
+        EntityModel<PlantaResponseDTO> plantaModel = EntityModel.of(responseDTO,
                 linkTo(methodOn(PlantaController.class).buscarPlantaPorId(id, usuarioLogado)).withSelfRel(),
                 linkTo(methodOn(PlantaController.class).atualizarPlanta(id, null, usuarioLogado)).withRel("update"),
                 linkTo(methodOn(PlantaController.class).deletarPlanta(id, usuarioLogado)).withRel("delete"),
@@ -84,14 +96,15 @@ public class PlantaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EntityModel<Planta>> atualizarPlanta(
-            @PathVariable Integer id,
-            @RequestBody @Valid PlantaDTO plantaDTO,
-            @AuthenticationPrincipal Usuario usuarioLogado
+    public ResponseEntity<?> atualizarPlanta(@PathVariable Long id,
+                                             @RequestBody @Valid PlantaDTO plantaDTO,
+                                             @AuthenticationPrincipal Usuario usuarioLogado
     ) {
-        Planta plantaAtualizada = plantaService.atualizarPlanta(Long.valueOf(id), plantaDTO, usuarioLogado);
+        Planta plantaAtualizada = plantaService.atualizarPlanta(id, plantaDTO, usuarioLogado);
 
-        EntityModel<Planta> plantaModel = EntityModel.of(plantaAtualizada,
+        PlantaResponseDTO responseDTO = toResponseDTO(plantaAtualizada);
+
+        EntityModel<PlantaResponseDTO> plantaModel = EntityModel.of(responseDTO,
                 linkTo(methodOn(PlantaController.class).buscarPlantaPorId(id, usuarioLogado)).withSelfRel(),
                 linkTo(methodOn(PlantaController.class).listarPlantas(usuarioLogado)).withRel("todas-plantas")
         );
@@ -101,11 +114,10 @@ public class PlantaController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarPlanta(
-            @PathVariable Integer id,
+            @PathVariable Long id,
             @AuthenticationPrincipal Usuario usuarioLogado
     ) {
-
-        plantaService.deletarPlanta(Long.valueOf(id), usuarioLogado);
+        plantaService.deletarPlanta(id, usuarioLogado);
         return ResponseEntity.noContent().build();
     }
 }
