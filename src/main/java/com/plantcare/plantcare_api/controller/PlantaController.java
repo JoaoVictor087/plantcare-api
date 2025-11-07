@@ -30,11 +30,14 @@ public class PlantaController {
     private PlantaResponseDTO toResponseDTO(Planta planta) {
         return new PlantaResponseDTO(
                 planta.getId(),
-                planta.getNomePlanta(),
-                planta.getTipoPlanta(),
+                planta.getNome(),
+                planta.getEspecie(),
                 planta.getDataCadastro(),
                 planta.getDataAtualizacao(),
-                planta.getImgLink()
+                planta.getImgLink(),
+                planta.getUmidade(),
+                planta.getTemperatura(),
+                planta.getStatus()
         );
     }
 

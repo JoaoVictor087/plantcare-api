@@ -21,17 +21,19 @@ import java.util.List;
 public class PlantaService {
     private final PlantaRepository plantaRepository;
     public Planta adicionarPlanta(PlantaDTO dto, Usuario usuarioLogado){
-        LocalDateTime dateTime = LocalDateTime.now();
-
         Planta newPlanta = new Planta();
-        newPlanta.setNomePlanta(dto.nomePlanta());
-        newPlanta.setTipoPlanta(dto.tipoPlanta());
-        newPlanta.setDataCadastro(dateTime);
+        newPlanta.setNome(dto.nome());
+        newPlanta.setEspecie(dto.especie());
+        newPlanta.setDataCadastro(LocalDateTime.now());
         newPlanta.setUsuario(usuarioLogado);
 
+        newPlanta.setUmidade(0.0);
+        newPlanta.setTemperatura(0.0);
+        newPlanta.setStatus("Monitorando...");
+
         log.info("Planta criada:" +
-                "\nNome da planta: " + newPlanta.getNomePlanta() +
-                "\nTipo da planta: " + newPlanta.getTipoPlanta() +
+                "\nNome da planta: " + newPlanta.getNome() +
+                "\nTipo da planta: " + newPlanta.getEspecie() +
                 "\nData e hora: " + newPlanta.getDataCadastro() +
                 "\nDono da planta: " + newPlanta.getUsuario());
         return plantaRepository.save(newPlanta);
@@ -54,8 +56,8 @@ public class PlantaService {
         Planta planta = getPlantaById(id);
         checkOwnership(planta, usuarioLogado);
 
-        planta.setNomePlanta(plantaDTO.nomePlanta());
-        planta.setTipoPlanta(plantaDTO.tipoPlanta());
+        planta.setNome(plantaDTO.nome());
+        planta.setEspecie(plantaDTO.especie());
         planta.setDataAtualizacao(LocalDateTime.now());
         return plantaRepository.save(planta);
     }

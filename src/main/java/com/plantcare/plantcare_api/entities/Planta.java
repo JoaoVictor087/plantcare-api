@@ -17,10 +17,10 @@ public class Planta {
     private Long id;
 
     @Column(name = "NM_PLANTA", nullable = false)
-    private String nomePlanta;
+    private String nome;
 
     @Column(name = "TIPO_PLANTA", nullable = false)
-    private String tipoPlanta;
+    private String especie;
 
     @Column(name = "DT_CADASTRO", nullable = false)
     private LocalDateTime dataCadastro;
@@ -30,6 +30,15 @@ public class Planta {
 
     @Column(name = "imagem")
     private String imgLink;
+
+    @Column(name = "vl_umidade")
+    private Double umidade;
+
+    @Column(name = "vl_temperatura")
+    private Double temperatura;
+
+    @Column(name = "status")
+    private String status;
 
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO", nullable = false)

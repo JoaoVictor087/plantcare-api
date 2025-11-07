@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 
 public record PlantaResponseDTO(
         Long id,
-        String nomePlanta,
-        String tipoPlanta,
+        String nome,
+        String especie,
         LocalDateTime dataCadastro,
         LocalDateTime dataAtualizacao,
-        String imgLink
+        String imgLink,
+        Double umidade,
+        Double temperatura,
+        String status
 ) {}
