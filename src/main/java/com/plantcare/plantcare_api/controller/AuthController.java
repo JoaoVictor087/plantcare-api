@@ -3,6 +3,7 @@ package com.plantcare.plantcare_api.controller;
 import com.plantcare.plantcare_api.DTOs.request.CriarUsuarioDTO;
 import com.plantcare.plantcare_api.DTOs.request.LoginRequestDTO;
 import com.plantcare.plantcare_api.DTOs.response.LoginResponseDTO;
+import com.plantcare.plantcare_api.DTOs.response.RefreshTokenDTO;
 import com.plantcare.plantcare_api.entities.Usuario;
 import com.plantcare.plantcare_api.exceptions.EmailException;
 import com.plantcare.plantcare_api.repositories.UsuarioRepository;
@@ -37,4 +38,11 @@ public class AuthController {
     public ResponseEntity<?>login (@RequestBody @Valid LoginRequestDTO dto){
         return ResponseEntity.ok(authService.login(dto));
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refreshToken(@RequestBody RefreshTokenDTO dto) {
+        LoginResponseDTO response = authService.refreshToken(dto);
+        return ResponseEntity.ok(response);
+    }
+
 }

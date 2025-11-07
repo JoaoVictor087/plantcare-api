@@ -29,18 +29,26 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        log.debug("Requisição recebida para: " + request.getRequestURI());
+        log.debug("Requisição recebida para: {}", request.getRequestURI());
         String token = recuperarTokenRequisicao(request);
 
-        if(token != null){
+        if (token != null) {
+
             String email = jwtTokenProvider.verificarToken(token);
-            Usuario usuario = usuarioRepository.findByEmailUsuarioIgnoreCase(email).orElseThrow();
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(usuario, null,
-                    usuario.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (email != null) {
+
+                var usuarioOptional = usuarioRepository.findByEmailUsuarioIgnoreCase(email);
+
+                if (usuarioOptional.isPresent()) {
+                    Usuario usuario = usuarioOptional.get();
+                    Authentication authentication = new UsernamePasswordAuthenticationToken(usuario, null,
+                            usuario.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+
         }
-
         filterChain.doFilter(request, response);
     }
 

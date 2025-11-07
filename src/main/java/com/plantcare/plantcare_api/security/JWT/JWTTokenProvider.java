@@ -41,8 +41,8 @@ public class JWTTokenProvider {
             Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             return JWT.create()
                     .withIssuer("PlantCare")
-                    .withSubject(String.valueOf(usuario.getIdUsuario()))
-                    .withExpiresAt(expiracao(120))
+                    .withSubject(usuario.getEmailUsuario())
+                    .withExpiresAt(expiracao(43200))
                     .sign(algorithm);
         } catch (JWTCreationException exception){
             log.error("Erro ao criar Token Refresh JWT");
