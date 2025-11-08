@@ -14,6 +14,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=system
       - SPRING_DATASOURCE_PASSWORD=280103
       - SERVER_SERVLET_CONTEXT_PATH=/api
+      - jwt.secret=dGVzdGVTZWNyZXRLZXlGb3JEZXZlbG9wbWVudE9ubHkxMjM0NTY3ODkw
+      - jwt.access-token-expiration=604800000
     depends_on:
       - oracle-db
 
