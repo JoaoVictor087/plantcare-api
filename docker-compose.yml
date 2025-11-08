@@ -15,8 +15,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=280103
       - SERVER_SERVLET_CONTEXT_PATH=/api
     depends_on:
-      oracle-db:
-        condition: service_healthy
+      - oracle-db
 
   # 2. Serviço do Banco de Dados Oracle
   oracle-db:
