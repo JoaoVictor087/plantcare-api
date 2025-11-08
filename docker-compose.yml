@@ -1,44 +1,42 @@
 version: '3.8'
 
 services:
-  # 1. Serviço da sua API Java
+  # 1. Serviço da sua API Java (plantcare-api)
   app:
-    # Constrói a imagem usando o Dockerfile no diretório atual (.)
     build: .
-    # Define o nome do container
     container_name: java-api
-    # O desafio pede para rodar em background
     command: ["java", "-jar", "app.jar"]
     ports:
-      # Mapeia a porta 8080 do seu PC para a 8080 do container
       - "8080:8080"
-    # Configuração do Spring Boot para conectar no banco (veja abaixo)
     environment:
+      # Configs para sua API se conectar ao container 'oracle-db'
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-db:1521/FREEPDB1
       - SPRING_DATASOURCE_USERNAME=system
-      - SPRING_DATASOURCE_PASSWORD=MeuOraclePassword123
-    # Faz com que a API só suba DEPOIS que o banco de dados estiver pronto
+      - SPRING_DATASOURCE_PASSWORD=280103
+      - SERVER_SERVLET_CONTEXT_PATH=/api
     depends_on:
       oracle-db:
         condition: service_healthy
 
   # 2. Serviço do Banco de Dados Oracle
   oracle-db:
-    # Imagem oficial do Oracle Database Free
     image: container-registry.oracle.com/database/free:latest
     container_name: oracle-db
     ports:
-      # Mapeia a porta 1521 do seu PC para a 1521 do container
       - "1521:1521"
     environment:
-      # Define a senha para os usuários SYSTEM e SYS
-      - ORACLE_PWD=MeuOraclePassword123
-      # Permite o acesso ao banco de dados plugável (PDB)
+      # Define a senha dos usuários SYSTEM/SYS para '280103'
+      - ORACLE_PWD=280103
       - ORACLE_PDB_LSNR_PORT=1521
-    # Verifica se o banco está pronto antes de liberar outros serviços
     healthcheck:
       test: ["CMD", "healthcheck.sh"]
       interval: 1m30s
       timeout: 10s
       retries: 3
       start_period: 10m
+    volumes:
+      # Garante que os dados do banco não se percam
+      - oracle_data:/opt/oracle/oradata
+
+volumes:
+  oracle_data:
