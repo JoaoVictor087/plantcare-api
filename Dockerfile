@@ -1,6 +1,5 @@
-# --- Estágio 1: Build (Construção) ---
-# Usamos uma imagem completa do Maven e JDK para compilar o código
-FROM maven:3.8-openjdk-17-slim AS builder
+# --- Estágio 1: Build (Construção com JDK 25) ---
+FROM maven:3.9-eclipse-temurin-25 AS builder
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
@@ -13,9 +12,9 @@ RUN mvn dependency:go-offline
 COPY src ./src
 RUN mvn package -DskipTests
 
-# --- Estágio 2: Run (Execução) ---
-# Usamos uma imagem Alpine com JRE, que é super leve e segura
-FROM eclipse-temurin:17-jre-alpine
+# --- Estágio 2: Run (Execução com JRE 25) ---
+# Usamos uma imagem Alpine com JRE 25, que é leve e segura
+FROM eclipse-temurin:25-jre-alpine
 
 # O desafio pede um usuário sem privilégios de administrador
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
@@ -25,8 +24,8 @@ USER appuser
 WORKDIR /app
 
 # Copia o arquivo .jar construído no estágio anterior
-# IMPORTANTE: Troque 'seu-app-0.0.1-SNAPSHOT.jar' pelo nome exato do .jar que o seu projeto gera!
-COPY --from=builder /app/target/seu-app-0.0.1-SNAPSHOT.jar app.jar
+# IMPORTANTE: Troque pelo nome exato do seu .jar!
+COPY --from=builder /app/target/plantcare-api-0.0.1-SNAPSHOT.jar app.jar
 
 # Expõe a porta que o Spring Boot usa (padrão 8080)
 EXPOSE 8080
