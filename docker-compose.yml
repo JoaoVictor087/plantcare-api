@@ -5,19 +5,27 @@ services:
   app:
     build: .
     container_name: java-api
-    restart: on-failure  # <-- ADICIONE ESTA LINHA
+    # Reinicia a API automaticamente se ela falhar (ex: se o banco não estiver pronto)
+    restart: on-failure
     command: ["java", "-jar", "app.jar"]
     ports:
       - "8080:8080"
     environment:
-      # --- Configs do Banco de Dados ---
+      # --- Configs do Banco de Dados (Para o container 'oracle-db') ---
       - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@oracle-db:1521/FREEPDB1
-      - SPRING_DATASOURCE_USERNAME=rm559726
+      - SPRING_DATASOURCE_USERNAME=system
       - SPRING_DATASOURCE_PASSWORD=280103
+
+      # --- Configs do seu application.properties ---
       - SERVER_SERVLET_CONTEXT_PATH=/api
-      # --- Configs do JWT (NOVO) ---
+      - spring.jpa.hibernate.ddl-auto=update
+      - spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
+      - spring.jpa.show-sql=true
+      - logging.level.org.springframework.security=DEBUG
+
+      # --- Configs do JWT (Corrigi meu typo anterior) ---
       - jwt.secret=dGVzdGVTZWNyZXRLZXlGb3JEZXZlbG9wbWVudE9ubHkxMjM0NTY3ODkw
-      - jwt.access-token-expiration=604800000 # (Mantive seu typo "acess")
+      - jwt.access-token-expiration=604800000
     depends_on:
       - oracle-db
 
@@ -26,8 +34,10 @@ services:
     image: container-registry.oracle.com/database/free:latest
     container_name: oracle-db
     ports:
+      # Expõe a porta do banco para você acessar de fora, se precisar
       - "1521:1521"
     environment:
+      # Define a senha do usuário 'system' para a mesma do seu properties
       - ORACLE_PWD=280103
       - ORACLE_PDB_LSNR_PORT=1521
     healthcheck:
@@ -35,8 +45,10 @@ services:
       interval: 1m30s
       timeout: 10s
       retries: 3
+      # Damos 20 minutos de tolerância para o banco iniciar
       start_period: 20m
     volumes:
+      # Garante que os dados do banco sejam salvos permanentemente
       - oracle_data:/opt/oracle/oradata
 
 volumes:
