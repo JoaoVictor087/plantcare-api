@@ -1,399 +1,311 @@
-openapi: 3.0.3
+openapi: 3.0.0
 info:
-  title: PlantCare API
-  description: API para gerenciamento de usuários e suas plantas
+  title: PlantCare API (Corrigida)
+  description: Documentação da API para o aplicativo de monitoramento de plantas PlantCare.
   version: 1.0.0
-  contact:
-    name: PlantCare Support
-
 servers:
-  - url: http://localhost:8080/api
-    description: Servidor de desenvolvimento
-  - url: https://api.plantcare.com/api
-    description: Servidor de produção
-
-tags:
-  - name: usuario
-    description: Operações relacionadas ao gerenciamento de usuários
-  - name: planta
-    description: Operações relacionadas ao gerenciamento de plantas
-
-paths:
-  /usuario/criarUsuario:
-    post:
-      tags:
-        - usuario
-      summary: Criar um novo usuário
-      description: Cria um novo registro de usuário no sistema
-      operationId: criarUsuario
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CriarUsuarioRequest'
-            examples:
-              exemplo1:
-                summary: Exemplo de criação de usuário
-                value:
-                  nome: João Silva
-                  email: joao.silva@email.com
-                  senha: senha123
-      responses:
-        '201':
-          description: Usuário criado com sucesso
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Usuário criado com sucesso
-        '400':
-          description: Dados inválidos
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Email já está cadastrado
-        '500':
-          description: Erro interno do servidor
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Erro interno do servidor
-
-  /planta/{id_usuario}/adicionarPlanta:
-    post:
-      tags:
-        - planta
-      summary: Adicionar uma nova planta para um usuário
-      description: Cadastra uma nova planta e a associa a um usuário existente
-      operationId: adicionarPlanta
-      parameters:
-        - name: id_usuario
-          in: path
-          required: true
-          description: ID do usuário ao qual a planta será associada
-          schema:
-            type: integer
-            format: int64
-          example: 1
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PlantaRequest'
-            examples:
-              exemplo1:
-                summary: Exemplo de adição de planta
-                value:
-                  nomePlanta: Cacto
-                  tipoPlanta: Cactaceae
-      responses:
-        '201':
-          description: Planta adicionada com sucesso
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Planta adicionada com sucesso
-        '500':
-          description: Erro interno do servidor
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Erro interno do servidor do servidor
-
-  /planta/atualizarPlanta/{id_planta}:
-    put:
-      tags:
-        - planta
-      summary: Atualizar uma planta existente
-      description: Atualiza as informações de uma planta específica pelo seu ID
-      operationId: atualizarPlanta
-      parameters:
-        - name: id_planta
-          in: path
-          required: true
-          description: ID da planta a ser atualizada
-          schema:
-            type: integer
-            format: int64
-          example: 1
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PlantaRequest'
-            examples:
-              exemplo1:
-                summary: Exemplo de atualização de planta
-                value:
-                  nomePlanta: Cacto do Deserto
-                  tipoPlanta: Cactaceae
-      responses:
-        '200':
-          description: Planta atualizada com sucesso
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Planta atualizada com sucesso
-        '404':
-          description: Planta não encontrada
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Planta não existe no banco de dados
-        '500':
-          description: Erro interno do servidor
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Erro interno do servidor
-
-  /planta/listarPlantas/{id_usuario}:
-    get:
-      tags:
-        - planta
-      summary: Listar todas as plantas de um usuário
-      description: Retorna uma lista paginada de todas as plantas associadas a um usuário específico
-      operationId: listarPlantas
-      parameters:
-        - name: id_usuario
-          in: path
-          required: true
-          description: ID do usuário cujas plantas serão listadas
-          schema:
-            type: integer
-            format: int64
-          example: 1
-        - name: page
-          in: query
-          required: false
-          description: Número da página
-          schema:
-            type: integer
-            default: 0
-          example: 0
-        - name: size
-          in: query
-          required: false
-          description: Quantidade de itens por página
-          schema:
-            type: integer
-            default: 20
-          example: 20
-      responses:
-        '200':
-          description: Lista de plantas retornada com sucesso
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PlantaPageResponse'
-              examples:
-                exemplo1:
-                  summary: Exemplo de resposta paginada
-                  value:
-                    content:
-                      - id: 1
-                        nomePlanta: Cacto
-                        tipoPlanta: Cactaceae
-                        dataCadastro: '2025-10-09T14:30:00'
-                      - id: 2
-                        nomePlanta: Rosa
-                        tipoPlanta: Rosaceae
-                        dataCadastro: '2025-10-09T15:00:00'
-                    pageable:
-                      pageNumber: 0
-                      pageSize: 20
-                      offset: 0
-                      paged: true
-                      unpaged: false
-                    totalPages: 1
-                    totalElements: 2
-                    last: true
-                    first: true
-                    size: 20
-                    number: 0
-                    numberOfElements: 2
-                    empty: false
-        '500':
-          description: Erro interno do servidor
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Erro interno do servidor
-
-  /planta/deletarPlanta/{id_planta}:
-    delete:
-      tags:
-        - planta
-      summary: Deletar uma planta
-      description: Remove uma planta do sistema pelo seu ID
-      operationId: deletarPlanta
-      parameters:
-        - name: id_planta
-          in: path
-          required: true
-          description: ID da planta a ser deletada
-          schema:
-            type: integer
-            format: int64
-          example: 1
-      responses:
-        '200':
-          description: Planta deletada com sucesso
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Planta deletada com sucesso
-        '404':
-          description: Planta não encontrada
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Planta não encontrada no banco de dados
-        '500':
-          description: Erro interno do servidor
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Erro interno do servidor
+  - url: '{baseUrl}'
+    variables:
+      baseUrl:
+        default: http://localhost:8080
+        description: Endereço base da API
 
 components:
+  # Esquema de Segurança para Bearer Token (JWT)
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  # Schemas (DTOs) baseados nos corpos das requisições
   schemas:
-    CriarUsuarioRequest:
+    CriarContaDTO:
       type: object
-      required:
-        - nome
-        - email
-        - senha
       properties:
         nome:
           type: string
-          description: Nome completo do usuário
-          example: João Silva
+          example: "Seu Nome"
         email:
           type: string
           format: email
-          description: Endereço de e-mail do usuário
-          example: joao.silva@email.com
+          example: "usuario@email.com"
         senha:
           type: string
           format: password
-          description: Senha do usuário
-          example: senha123
-
-    PlantaRequest:
-      type: object
-      required:
-        - nomePlanta
-        - tipoPlanta
-      properties:
-        nomePlanta:
-          type: string
-          description: Nome da planta
-          example: Cacto
-        tipoPlanta:
-          type: string
-          description: Tipo ou espécie da planta
-          example: Cactaceae
-
-    Planta:
+          example: "SuaSenha@123"
+    LoginRequestDTO:
       type: object
       properties:
-        id:
+        email:
+          type: string
+          format: email
+          example: "usuario@email.com"
+        senha:
+          type: string
+          format: password
+          example: "SuaSenha@123"
+    RefreshTokenDTO:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+          example: "COLE_SEU_REFRESH_TOKEN_AQUI"
+    AtualizarUsuarioDTO:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: "Novo Nome"
+    PlantaDTO:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: "Minha Samambaia"
+        especie:
+          type: string
+          example: "Samambaia"
+    PlantaUpdateDTO:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: "Samambaia Atualizada"
+        especie:
+          type: string
+          example: "Nova Especie"
+    CreateSensorDTO:
+      type: object
+      properties:
+        id_planta:
           type: integer
-          format: int64
-          description: ID único da planta
           example: 1
-        nomePlanta:
+        tipoSensor:
           type: string
-          description: Nome da planta
-          example: Cacto
-        tipoPlanta:
-          type: string
-          description: Tipo ou espécie da planta
-          example: Cactaceae
-        dataCadastro:
+          example: "SENSOR_UMIDADE"
+    RemoveSensorBody:
+      type: string
+      description: O ID do sensor a ser removido (enviado como 'raw')
+      example: '1'
+    LeituraSensorDTO:
+      type: object
+      properties:
+        id_sensor:
+          type: integer
+          example: 1
+        valor:
+          type: number
+          format: double
+          example: 55.5
+    ErrorResponse:
+      type: object
+      properties:
+        timestamp:
           type: string
           format: date-time
-          description: Data e hora do cadastro da planta
-          example: '2025-10-09T14:30:00'
+        status:
+          type: integer
+        error:
+          type: string
+        path:
+          type: string
 
-    Pageable:
-      type: object
-      properties:
-        pageNumber:
-          type: integer
-          description: Número da página atual
-          example: 0
-        pageSize:
-          type: integer
-          description: Tamanho da página
-          example: 20
-        offset:
-          type: integer
-          description: Offset da página
-          example: 0
-        paged:
-          type: boolean
-          description: Indica se a resposta é paginada
-          example: true
-        unpaged:
-          type: boolean
-          description: Indica se a resposta não é paginada
-          example: false
-
-    PlantaPageResponse:
-      type: object
-      properties:
+# Definição dos Endpoints
+paths:
+  # ========== AUTH ==========
+  /auth/criarConta:
+    post:
+      tags: [Auth]
+      summary: Criar Conta
+      requestBody:
         content:
-          type: array
-          items:
-            $ref: '#/components/schemas/Planta'
-          description: Lista de plantas na página atual
-        pageable:
-          $ref: '#/components/schemas/Pageable'
-        totalPages:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CriarContaDTO'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestDTO'
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Refresh Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenDTO'
+      responses:
+        '200':
+          description: OK
+        '403':
+          description: Forbidden
+
+  # ========== USUARIO ==========
+  /usuario/me:
+    put:
+      tags: [Usuario]
+      summary: Atualizar Meu Usuário
+      security:
+        - bearerAuth: [] # Requisição protegida
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AtualizarUsuarioDTO'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+
+  # ========== PLANTAS ==========
+  /plantas:
+    post:
+      tags: [Plantas]
+      summary: Criar Planta
+      security:
+        - bearerAuth: [] # Requisição protegida
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlantaDTO'
+      responses:
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+    get:
+      tags: [Plantas]
+      summary: Listar Plantas
+      security:
+        - bearerAuth: [] # Requisição protegida
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+
+  /plantas/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
           type: integer
-          description: Número total de páginas
-          example: 1
-        totalElements:
-          type: integer
-          description: Número total de elementos
-          example: 2
-        last:
-          type: boolean
-          description: Indica se é a última página
-          example: true
-        first:
-          type: boolean
-          description: Indica se é a primeira página
-          example: true
-        size:
-          type: integer
-          description: Tamanho da página
-          example: 20
-        number:
-          type: integer
-          description: Número da página atual
-          example: 0
-        numberOfElements:
-          type: integer
-          description: Número de elementos na página atual
-          example: 2
-        empty:
-          type: boolean
-          description: Indica se a página está vazia
-          example: false
+    get:
+      tags: [Plantas]
+      summary: Buscar Planta por ID
+      security:
+        - bearerAuth: [] # Requisição protegida
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+    put:
+      tags: [Plantas]
+      summary: Atualizar Planta
+      security:
+        - bearerAuth: [] # Requisição protegida
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlantaUpdateDTO'
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+    delete:
+      tags: [Plantas]
+      summary: Deletar Planta
+      security:
+        - bearerAuth: [] # Requisição protegida
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not Found
+
+  # ========== SENSOR ==========
+  /sensor/addSensor:
+    post:
+      tags: [Sensor]
+      summary: Adicionar Sensor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSensorDTO'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+
+  /sensor/removeSensor:
+    delete:
+      tags: [Sensor]
+      summary: Remover Sensor
+      requestBody:
+        description: ID do sensor a ser removido (formato não-padrão)
+        content:
+          application/json: # O Postman envia 'raw' com 'json'
+            schema:
+              $ref: '#/components/schemas/RemoveSensorBody'
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+
+  /sensor/listarSensores:
+    get:
+      tags: [Sensor]
+      summary: Listar Sensores
+      responses:
+        '200':
+          description: OK
+
+  # ========== LEITURA ==========
+  /leitura:
+    post:
+      tags: [Leitura]
+      summary: Nova Leitura
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LeituraSensorDTO'
+      responses:
+        '201':
+          description: Created
+        '404':
+          description: Sensor Not Found

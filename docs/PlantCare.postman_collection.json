@@ -1,29 +1,23 @@
 {
 	"info": {
-		"_postman_id": "2e8f8965-6f2a-494e-83e9-605ba4c6eaa1",
-		"name": "PlantCare",
+		"_postman_id": "cc3e238a-42f2-40ec-8305-9e946af0ba1e",
+		"name": "PlantCare API (Corrigida)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "44685568",
-		"_collection_link": "https://crimson-spaceship-6852170.postman.co/workspace/Jo%C3%A3o-Victor's-Workspace~14d6886a-0239-43d5-8f95-4c6a62e730c8/collection/44685568-2e8f8965-6f2a-494e-83e9-605ba4c6eaa1?action=share&source=collection_link&creator=44685568"
+		"_collection_link": "https://crimson-spaceship-6852170.postman.co/workspace/Jo%C3%A3o-Victor's-Workspace~14d6886a-0239-43d5-8f95-4c6a62e730c8/collection/44685568-cc3e238a-42f2-40ec-8305-9e946af0ba1e?action=share&source=collection_link&creator=44685568"
 	},
 	"item": [
 		{
-			"name": "Usuario",
+			"name": "Auth",
 			"item": [
 				{
-					"name": "criarUsuario",
+					"name": "Criar Conta",
 					"request": {
 						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nome\": \"Alex Santos\",\r\n    \"email\": \"fdshjfhdsf@gmail.com\",\r\n    \"senha\": \"12345678@\"\r\n}",
+							"raw": "{\n    \"nome\": \"Seu Nome\",\n    \"email\": \"usuario@email.com\",\n    \"senha\": \"SuaSenha@123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -31,15 +25,67 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/usuario/criarUsuario",
+							"raw": "{{base_url}}/auth/criarConta",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8080",
 							"path": [
-								"api",
-								"usuario",
-								"criarUsuario"
+								"auth",
+								"criarConta"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"usuario@email.com\",\n    \"senha\": \"SuaSenha@123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refreshToken\": \"COLE_SEU_REFRESH_TOKEN_AQUI\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/refresh",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"refresh"
 							]
 						}
 					},
@@ -48,58 +94,16 @@
 			]
 		},
 		{
-			"name": "Planta",
+			"name": "Usuario",
 			"item": [
 				{
-					"name": "adicionarPlanta",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"nomePlanta\": \"Cacto9\",\r\n    \"tipoPlanta\": \"Cactaceae\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8080/api/planta/1/adicionarPlanta",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"planta",
-								"1",
-								"adicionarPlanta"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "atualizarPlanta",
+					"name": "Atualizar Meu Usuário",
 					"request": {
 						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nomePlanta\": \"Novo Cacto\",\r\n    \"tipoPlanta\": \"Cactaceae2\"\r\n}",
+							"raw": "{\n    \"nome\": \"Novo Nome\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -107,42 +111,88 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/api/planta/atualizarPlanta/4",
+							"raw": "{{base_url}}/usuario/me",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8080",
 							"path": [
-								"api",
-								"planta",
-								"atualizarPlanta",
-								"4"
+								"usuario",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{auth_token}}",
+						"type": "string"
+					}
+				]
+			}
+		},
+		{
+			"name": "Plantas",
+			"item": [
+				{
+					"name": "Criar Planta",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Minha Samambaia\",\n    \"especie\": \"Samambaia\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/plantas",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"plantas"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "ListarPlantasDoUsuario",
+					"name": "Listar Plantas",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/planta/listarPlantas/1",
+							"raw": "{{base_url}}/plantas",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8080",
 							"path": [
-								"api",
-								"planta",
-								"listarPlantas",
+								"plantas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Planta por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/plantas/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"plantas",
 								"1"
 							]
 						}
@@ -150,33 +200,179 @@
 					"response": []
 				},
 				{
-					"name": "deletarPlantaPorId",
+					"name": "Atualizar Planta",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nome\": \"Samambaia Atualizada\",\n    \"especie\": \"Nova Especie\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/plantas/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"plantas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Planta",
 					"request": {
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
-							"raw": "localhost:8080/api/planta/deletarPlanta/953",
+							"raw": "{{base_url}}/plantas/1",
 							"host": [
-								"localhost"
+								"{{base_url}}"
 							],
-							"port": "8080",
 							"path": [
-								"api",
-								"planta",
-								"deletarPlanta",
-								"953"
+								"plantas",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{auth_token}}",
+						"type": "string"
+					}
+				]
+			}
+		},
+		{
+			"name": "Sensor",
+			"item": [
+				{
+					"name": "Adicionar Sensor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_planta\": 1,\n    \"tipoSensor\": \"SENSOR_UMIDADE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/sensor/addSensor",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sensor",
+								"addSensor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remover Sensor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "1",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/sensor/removeSensor",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sensor",
+								"removeSensor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Sensores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/sensor/listarSensores",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"sensor",
+								"listarSensores"
 							]
 						}
 					},
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Leitura",
+			"item": [
+				{
+					"name": "Nova Leitura",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id_sensor\": 1,\n    \"valor\": 55.5\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/leitura",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"leitura"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080"
+		},
+		{
+			"key": "auth_token",
+			"value": ""
 		}
 	]
 }
