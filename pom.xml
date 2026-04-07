@@ -82,6 +82,16 @@
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
 
+		<!-- Source: https://mvnrepository.com/artifact/org.flywaydb/flyway-database-oracle -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-oracle</artifactId>
+			<version>12.3.0</version>
+			<scope>compile</scope>
+		</dependency>
+
+
+
     </dependencies>
 
 	<build>
