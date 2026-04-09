@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "T_PC_USUARIOS")
 public class Usuario implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_USUARIO")
     private long idUsuario;
 

@@ -81,7 +81,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
-
 		<!-- Source: https://mvnrepository.com/artifact/org.flywaydb/flyway-database-oracle -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -89,9 +88,6 @@
 			<version>12.3.0</version>
 			<scope>compile</scope>
 		</dependency>
-
-
-
     </dependencies>
 
 	<build>

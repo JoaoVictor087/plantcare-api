@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "T_PC_SENSOR")
 public class Sensor {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_SENSOR")
     private Long id;
 
