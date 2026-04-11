@@ -24,68 +24,107 @@ Este projeto foi desenvolvido por:
 |---------------|-----|
 | João Victor Alves da Silva | 559726 |
 | Vinicius Kenzo Tocuyosi | 559982 |
+ | Juan Pablo Rebelo Coelho | 560445 |
 
 ## 🛠️ Instruções de Execução da Aplicação (API Java/Spring Boot)
 
 ### Pré-requisitos
-
 - Java JDK 25
 - Maven
+- Azure CLI instalado e configurado
 - Banco de Dados Oracle (Autonomous Database ou instalação local)
+
+---
 
 ### Configuração do Banco de Dados
 
 ⚠️ **ARQUIVO DE CONFIGURAÇÃO (application.properties)**
 
-O arquivo de configuração com as credenciais do banco de dados (`src/main/resources/application.properties`) está incluso no arquivo `.gitignore` por questões de segurança.
+O arquivo de configuração com as credenciais do banco de dados
+(`src/main/resources/application.properties`) está alterado para
+utilizar variáveis de ambiente.
 
-O professor responsável pela avaliação receberá o arquivo de propriedades com as credenciais de acesso ao Oracle Database separadamente para que possa executar a aplicação e validar a persistência dos dados.
+O professor responsável pela avaliação receberá o arquivo de ambiente
+com as credenciais de acesso ao Oracle Database separadamente para que
+possa executar a aplicação e validar a persistência dos dados.
 
-Para rodar o projeto em outro ambiente, crie o arquivo e preencha com as suas próprias credenciais, garantindo que o context-path esteja configurado para `/api`:
+Para rodar o projeto em outro ambiente, crie o arquivo `.env` na raiz
+do projeto e preencha com as suas próprias credenciais:
 
-```properties
-# Exemplo de configuração COMPLETA no application.properties
-spring.application.name=plantcare-api
-server.servlet.context-path=/api
-
-spring.datasource.url = jdbc:oracle:thin:@oracle.fiap.com.br:1521:ORCL
-spring.datasource.username = USERNAME
-spring.datasource.password = SENHA
-spring.jpa.hibernate.ddl-auto=update
-spring.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
-
-#otimizar as queries SQL Oracle
-spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
-
-spring.jpa.show-sql=true
-spring.h2.console.enabled=true
-
-#JWT
-jwt.secret=SENHA_JWT
-jwt.acess-token-expiration=604800000
-
-logging.level.org.springframework.security=DEBUG
-
+```dotenv
+DB_URL=db_url
+DB_USERNAME=db_username
+DB_PASSWORD=db_password
+JWT_SECRET=jwt_secret
 ```
 
-### Inicialização do Servidor
+---
 
-1. Clone o repositório e navegue até a pasta raiz do projeto.
+### Execução Local
 
-2. Compile o projeto usando o wrapper Maven fornecido:
-
+1. Clone o repositório e navegue até a pasta raiz do projeto:
 ```bash
-./mvnw clean install
+git clone <repo-url>
+cd <project-folder>
 ```
 
-3. Execute a aplicação via Spring Boot:
+2. Compile o projeto:
+```bash
+./mvnw clean install -DskipTests
+```
 
+3. Execute a aplicação:
 ```bash
 ./mvnw spring-boot:run
 ```
 
-A API estará acessível no contexto base `/api` em `http://localhost:8080/api`.
+A API estará acessível em `http://localhost:8080/api`.
 
+---
+
+### Deploy na Azure (App Service)
+
+> ⚠️ Os recursos Azure (Resource Group, App Service Plan e Web App)
+> já estão criados e configurados. Os passos abaixo referem-se
+> apenas ao build e deploy da aplicação.
+
+1. Clone o repositório e navegue até a pasta raiz do projeto:
+```bash
+git clone <repo-url>
+cd <project-folder>
+```
+
+2. Faça login na Azure:
+```bash
+az login
+```
+
+3. Gere o JAR da aplicação:
+```bash
+./mvnw clean package -DskipTests
+```
+
+4. Realize o deploy para o Azure App Service:
+```bash
+az webapp deploy \
+  --name <app-name> \
+  --resource-group <resource-group-name> \
+  --src-path target/<seu-arquivo>.jar \
+  --type jar
+```
+
+A API estará acessível em `https://<app-name>.azurewebsites.net/api`.
+
+---
+
+### 🧪 Testando os Endpoints
+
+Após o deploy, utilize o Postman ou qualquer cliente HTTP para
+testar os endpoints. A URL base da aplicação na Azure é:
+
+```
+https://<app-name>.azurewebsites.net/api
+```
 ## 🗃️ Documentação e Testes (Pasta docs/)
 
 Para facilitar a correção, toda a documentação e os arquivos de teste foram organizados na pasta `docs/` na raiz do projeto:
