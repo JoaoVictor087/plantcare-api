@@ -154,13 +154,20 @@ Este diagrama (presente na documentação como "Diagrama UML") representa o Mape
 
 ![Diagrama UML](./docs/images/DIAGRAMA-UML-sprint-1.png "Diagrama UML")
 
-## 🌐 Endpoints da API Implementados (Nível de Maturidade 1 - Richardson)
+### Diagrama de Arquitetura Azure
+
+Este diagrama representa o fluxo da aplicação.
+
+![Diagrama de Arquitetura](./docs/images/plantcare_azure_architecture.svg "Diagrama de Arquitetura")
+
+## 🌐 Endpoints da API Implementados
 
 A API segue o Modelo de Maturidade Nível 3, utilizando o HTTP para diferentes ações (POST, PUT, GET, DELETE).
 
 ## 3.6) Listagem de Endpoints (Documentação da API)
 
 A `base_url` padrão para a API é `http://localhost:8080/api`.
+Para a versão em produção (Azure): `https://<app-name>.azurewebsites.net/api`.
 
 ### Recurso: Autenticação (`/auth`)
 Endpoints públicos para registro e login.
