@@ -171,6 +171,41 @@ Endpoints públicos para registro e login.
 | POST | `/auth/login` | Autentica um usuário e retorna um Access Token e Refresh Token. |
 | POST | `/auth/refresh` | Gera um novo Access Token usando um Refresh Token válido. |
 
+---
+**POST** `/auth/criarConta`
+
+**Request Body**
+```json
+{
+  "nome": "João Victor",
+  "email": "joao@email.com",
+  "senha": "senha123#"
+}
+```
+**Response Body** 201 CREATED
+```json
+```
+---
+
+**POST** `/auth/login`
+**Request Body**
+```json
+{
+  "email": "joao@email.com",
+  "senha": "senha123#"
+}
+```
+**Response Body** 200 OK
+```json
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiJ9...",
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9...",
+ "idUsuario": 23
+}
+```
+---
+
+
 ### Recurso: Usuário (`/usuario`)
 Endpoints protegidos para gerenciar o usuário autenticado.
 **Requer Autenticação: `Bearer Token`**
@@ -178,6 +213,19 @@ Endpoints protegidos para gerenciar o usuário autenticado.
 | Método HTTP | Rota Completa | Descrição |
 |:--- |:--- |:--- |
 | PUT | `/usuario/me` | Atualiza o nome do usuário que está autenticado. |
+---
+**PUT** `/usuario/me`
+**Request Body**
+```json
+{
+  "nome": "João Victor Alves"
+}
+```
+
+**Request Response** 200 OK
+```json
+```
+---
 
 ### Recurso: Plantas (`/plantas`)
 Endpoints protegidos para o CRUD de plantas do usuário autenticado.
@@ -190,6 +238,28 @@ Endpoints protegidos para o CRUD de plantas do usuário autenticado.
 | GET | `/plantas/{id}` | Busca os detalhes de uma planta específica pelo ID. |
 | PUT | `/plantas/{id}` | Atualiza os dados de uma planta específica. |
 | DELETE | `/plantas/{id}` | Remove uma planta pelo seu ID. |
+---
+**POST** `/plantas`
+```json
+{
+  "nome": "Samambaia",
+  "especie": "Nephrolepis exaltata"
+}
+```
+**GET** `/plantas` — sem body.
+
+**GET** `/plantas/{id}` — sem body, ID na URL.
+
+**PUT** `/plantas/{id}`
+```json
+{
+  "nome": "Samambaia Atualizada",
+  "especie": "Nephrolepis exaltata"
+}
+```
+
+**DELETE** `/plantas/{id}` — sem body, ID na URL.
+---
 
 ### Recurso: Sensor (`/sensor`)
 Endpoints para gerenciamento de sensores.
